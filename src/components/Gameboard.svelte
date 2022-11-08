@@ -2,26 +2,23 @@
 	import WhiteBoardLayer from '../assets/WhiteBoardLayer.svelte';
 	import BlackBoardLayer from '../assets/BlackBoardLayer.svelte';
 	import BoardCell from './BoardCell.svelte';
+	import { board, currentPlayer } from '../util/store';
 	let class_name = '';
 	export { class_name as class };
 
-	// Creates Board
-	const board: number[][] = new Array(6).fill([]).map(() => new Array(7).fill(0));
-	let isPlayer1 = true;
-
 	function dropInColumn(xPos: number) {
 		for (let i = 5; i >= 0; i--) {
-			if (board[i][xPos] === 0) {
-				board[i][xPos] = isPlayer1 ? 1 : 2;
-				isPlayer1 = !isPlayer1;
+			if ($board[i][xPos] === 0) {
+				$board[i][xPos] = $currentPlayer;
+				$currentPlayer = $currentPlayer === 1 ? 2 : 1;
 				return;
 			}
 		}
 	}
 
-	// Play Turn
-	function playTurn(xPos: number) {
-		dropInColumn(xPos);
+	function playTurn(row: number) {
+		// TODO: implement player turn check here
+		dropInColumn(row);
 	}
 </script>
 
@@ -30,9 +27,9 @@
 	<WhiteBoardLayer />
 	<!-- TODO: Make this a table to support  navigation -->
 	<div class="board">
-		{#each board as row, _}
+		{#each $board as row, _}
 			{#each row as playerPiece, xIndex}
-				<BoardCell value={playerPiece} on:click={() => dropInColumn(xIndex)} />
+				<BoardCell value={playerPiece} on:click={() => playTurn(xIndex)} />
 			{/each}
 		{/each}
 	</div>

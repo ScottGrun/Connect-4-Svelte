@@ -33,7 +33,7 @@
 
 	/* Animate chip falling into place */
 	.placed {
-		animation: slidein 200ms ease-in-out;
+		animation: slidein 200ms;
 	}
 
 	@keyframes slidein {
